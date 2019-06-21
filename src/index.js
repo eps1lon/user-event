@@ -218,6 +218,31 @@ const userEvent = {
         });
       }
     }
+  },
+
+  /**
+   * @param {KeyboardEventInit} eventInit
+   */
+  keyboard(eventInit) {
+    // see https://www.w3.org/TR/uievents/#interface-keyboardevent for specification
+
+    // The event target might change between different key events.
+    function getCurrentTarget() {
+      return (
+        document.activeElement || document.body || document.documentElement
+      );
+    }
+
+    fireEvent(getCurrentTarget(), eventInit);
+
+    // TODO: Does fireEvent.input also fire beforeInput?
+
+    const updatesDOM = true; // TODO
+    if (updatesDOM) {
+      fireEvent.input(getCurrentTarget(), eventInit);
+    }
+
+    fireEvent(getCurrentTarget(), eventInit);
   }
 };
 
